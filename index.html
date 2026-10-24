@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Chalkd Viewer</title>
+    <meta
+      name="description"
+      content="Open and view Chalkd whiteboard files (.chalkd) in your browser. Your boards stay on your device."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fbf8ef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#16191f" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="icon" href="img/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+    <link rel="preload" href="fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="css/style.css" />
+    <script type="module" src="js/app.js"></script>
+  </head>
+  <body>
+    <!-- Home: open a board, or pick a recent one. -->
+    <main id="home" class="home">
+      <header class="home-header">
+        <a class="brand" href="https://github.com/DibsCodes/chalkd">
+          <img src="img/icon-256.png" alt="" width="36" height="36" />
+          <span>Chalkd <em>Viewer</em></span>
+        </a>
+      </header>
+
+      <section class="hero">
+        <h1>Look at a Chalkd board, right in your browser.</h1>
+        <p class="lede">
+          Open a <code>.chalkd</code> file to zoom and pan around it. You can't edit
+          here, and the file never leaves your device.
+        </p>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" data-action="open">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
+            Open a board…
+          </button>
+          <span class="drop-hint">or drop a <code>.chalkd</code> file anywhere on this page</span>
+        </div>
+      </section>
+
+      <section class="recent" id="recent" hidden>
+        <div class="recent-head">
+          <h2>Recently opened</h2>
+          <button type="button" class="link-btn" data-action="clear-recent">Clear list</button>
+        </div>
+        <ul class="recent-grid" id="recent-list"></ul>
+        <p class="recent-note">
+          Copies of these boards are saved in this browser so they open again with one tap.
+          Clearing the list removes them.
+        </p>
+      </section>
+
+      <footer class="home-footer">
+        <a href="https://github.com/DibsCodes/chalkd">Get Chalkd</a>
+        <span aria-hidden="true">·</span>
+        <a href="https://github.com/DibsCodes/chalkd-webview">Source</a>
+      </footer>
+    </main>
+
+    <!-- Viewer: the board, full screen. -->
+    <section id="viewer" class="viewer" hidden aria-label="Board viewer">
+      <canvas id="board" class="board" tabindex="0" aria-label="Board. Drag to move, pinch or Ctrl+scroll to zoom."></canvas>
+
+      <div class="bar bar-top">
+        <button type="button" class="icon-btn" data-action="home" aria-label="Back to start" title="Back to start">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg>
+        </button>
+        <h1 class="board-title" id="board-title"></h1>
+        <button type="button" class="icon-btn" data-action="open" aria-label="Open another board" title="Open another board (Ctrl+O)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>
+        </button>
+      </div>
+
+      <div class="bar bar-zoom" role="group" aria-label="Zoom">
+        <button type="button" class="icon-btn" data-action="zoom-out" aria-label="Zoom out" title="Zoom out (−)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12" /></svg>
+        </button>
+        <button type="button" class="zoom-readout" id="zoom-readout" data-action="zoom-actual" title="Zoom to 100% (0)">100%</button>
+        <button type="button" class="icon-btn" data-action="zoom-in" aria-label="Zoom in" title="Zoom in (+)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12" /></svg>
+        </button>
+        <span class="bar-sep" aria-hidden="true"></span>
+        <button type="button" class="icon-btn" data-action="fit" aria-label="Fit the whole board" title="Fit the whole board (1)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4" /></svg>
+        </button>
+      </div>
+    </section>
+
+    <div class="busy" id="busy" hidden>
+      <div class="spinner" aria-hidden="true"></div>
+      <span>Opening…</span>
+    </div>
+    <div class="drop-overlay" id="drop-overlay" hidden>
+      <div>Drop to open</div>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+    <input type="file" id="file-input" accept=".chalkd" hidden />
+  </body>
+</html>
